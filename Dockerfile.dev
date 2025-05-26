@@ -1,0 +1,18 @@
+# Base image
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies early for better caching
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
+RUN npm install
+
+# Copy source (optional since we’ll bind mount in docker-compose)
+COPY . .
+
+# Expose dev port
+EXPOSE 3000
+
+# Default command (can be overridden in docker-compose)
+CMD ["npm", "run", "dev"]
